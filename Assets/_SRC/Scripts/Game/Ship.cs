@@ -50,27 +50,32 @@ public class Ship : MonoBehaviour {
                 
                 canProp = false;
                 DoPropulsion();
+                Debug.Log("Up pressed");
             }
         }
         Vector3 rot = t.localEulerAngles;
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) { 
             moveL = -sideForce;
             rot.z = 10;
+            Debug.Log("Left pressed");
         }
 
         if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A)) {
             moveL = 0;
             rot.z = 0;
+            Debug.Log("Left released");
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
             moveR = sideForce;
             rot.z = -10;
+            Debug.Log("Right pressed");
         }
 
         if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D)) {
             moveR = 0;
             rot.z = 0;
+            Debug.Log("Right released");
         }
 
         t.localEulerAngles = rot;
@@ -97,7 +102,7 @@ public class Ship : MonoBehaviour {
     }
 
     void DoPropulsion() {
-        rg2d.AddForce(Vector2.up * force);
+        rg2d.AddForce(Vector2.up * force * 1.5f);
         propulsor.SetTrigger("in");
     }
 
