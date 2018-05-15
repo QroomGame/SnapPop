@@ -7,6 +7,7 @@ public class GameData {
     private static GameData _instance = new GameData();
     public Transform shipTr;
     public PlatformManager platformManager;
+    public GameplayUI ui;
 
     private GameData() {
 

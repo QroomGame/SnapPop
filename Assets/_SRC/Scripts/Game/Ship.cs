@@ -18,6 +18,8 @@ public class Ship : MonoBehaviour {
     GameObject explotion;
     Vector3 posIni;
     SpriteRenderer sp;
+    bool rightPress = false;
+    bool leftPress = false;
 
 
     void Start() {
@@ -30,6 +32,7 @@ public class Ship : MonoBehaviour {
         explotion = t.Find("explosion").gameObject;
         posIni = t.position;
         sp = GetComponent<SpriteRenderer>();
+
     }
 
     public void Restart() {
@@ -40,6 +43,7 @@ public class Ship : MonoBehaviour {
         helixRight.gameObject.SetActive(true);
         t.position = posIni;
         canProp = true;
+        GameData.instance.ui.StarCount();
     }
 
     // Update is called once per frame
@@ -50,35 +54,64 @@ public class Ship : MonoBehaviour {
                 
                 canProp = false;
                 DoPropulsion();
-                Debug.Log("Up pressed");
+                //Debug.Log("Up pressed");
             }
         }
-        Vector3 rot = t.localEulerAngles;
+       
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) { 
             moveL = -sideForce;
-            rot.z = 10;
-            Debug.Log("Left pressed");
+            /*if (rot.z < 10) {
+                rot.z += 10;
+            }*/
+            leftPress = true;
+            //Debug.Log("Left pressed");
         }
 
         if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A)) {
             moveL = 0;
-            rot.z = 0;
-            Debug.Log("Left released");
+            //rot.z = 0;
+            /*if (rot.z > 0) {
+                rot.z -= 10;
+            }*/
+            leftPress = false;
+            //Debug.Log("Left released");
         }
 
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
             moveR = sideForce;
-            rot.z = -10;
-            Debug.Log("Right pressed");
+            //rot.z = -10;
+            /*if (rot.z >= 0) {
+                rot.z -= 10;
+            }*/
+            rightPress = true;
+            //Debug.Log("Right pressed");
         }
 
         if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D)) {
             moveR = 0;
-            rot.z = 0;
-            Debug.Log("Right released");
+            //rot.z = 0;
+            /*if (rot.z < 0) {
+                rot.z += 10;
+            }*/
+            rightPress = false;
+            //Debug.Log("Right released");
         }
-
-        t.localEulerAngles = rot;
+        if (!canProp) {
+            Vector3 rot = Vector3.zero;
+            if (rightPress) {
+                if (rot.z >= 0) {
+                    rot.z -= 10;
+                }
+            }
+            if (leftPress) {
+                if (rot.z < 10) {
+                    rot.z += 10;
+                }
+            }
+            //Debug.Log(rot);
+            t.localEulerAngles = rot;
+        }
+        
 
         if (!canProp) {
             Vector3 pos = t.position;
@@ -86,17 +119,23 @@ public class Ship : MonoBehaviour {
             t.position = pos;
         }
         
-        if (moveL != 0) {
+        if (moveL != 0 && !canProp) {
             helixLeft.SetBool("move", true);
             
         } else {
             helixLeft.SetBool("move", false);
         }
 
-        if (moveR != 0) {
+        if (moveR != 0 && !canProp) {
             helixRight.SetBool("move", true);
         } else {
             helixRight.SetBool("move", false);
+        }
+
+        GameData.instance.ui.AddPoints(t.position.y - posIni.y);
+       
+        if (rg2d.velocity.y <= -12) {
+            GameData.instance.ui.GameOver();
         }
 
     }
@@ -110,8 +149,10 @@ public class Ship : MonoBehaviour {
        
         if (collision.gameObject.layer == LayerMask.NameToLayer("platform")) {
             canProp = true;
-            
-            if (collision.transform.name== "floor" && collision.relativeVelocity.magnitude>=10) {
+            t.localEulerAngles = Vector3.zero;
+
+
+            if (collision.transform.name== "floor" && collision.relativeVelocity.magnitude>=12) {
                 Explode();
             }
             
@@ -120,8 +161,8 @@ public class Ship : MonoBehaviour {
 
     void Explode() {
 
-       GameObject.FindObjectOfType<GameManager>().GameOver();
-
+        //GameObject.FindObjectOfType<GameManager>().GameOver();
+        canProp = false;
         explotion.SetActive(true);
         sp.enabled = false;
         propulsor.gameObject.SetActive(false);

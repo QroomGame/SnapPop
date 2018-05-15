@@ -10,6 +10,7 @@ public class Platform : MonoBehaviour {
     public enum SIDE { left, right };
     public SIDE pSide;
     bool isvisible = false;
+    bool isDestroyed = false;
 	// Use this for initialization
 	void Start () {
 
@@ -37,15 +38,23 @@ public class Platform : MonoBehaviour {
 
     private void OnBecameInvisible() {
         
-        if (isvisible && t.position.y < ship.position.y) {
+        if (isvisible && t.position.y < ship.position.y - 3) {
             GameData.instance.platformManager.AddPlatforms(1);
+            Destroy(this);
             Destroy(gameObject);            
         }
 
     }
 
+    private void OnDestroy() {
+        isDestroyed = true;
+    }
     // Update is called once per frame
     void Update () {
+        if (isDestroyed) {
+            return;
+        }
+        
         if (t.position.y < ship.position.y) {
             col.isTrigger = false;
         } else {

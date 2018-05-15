@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 
 	void Awake(){
 		ui = GameObject.FindObjectOfType<GameplayUI>();
-		ui.gameObject.SetActive(false);
+		//ui.gameObject.SetActive(false);
 	}
 
 
