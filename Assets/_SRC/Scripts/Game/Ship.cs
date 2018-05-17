@@ -152,7 +152,7 @@ public class Ship : MonoBehaviour {
             t.localEulerAngles = Vector3.zero;
 
 
-            if (collision.transform.name== "floor" && collision.relativeVelocity.magnitude>=12) {
+            if (collision.transform.name== "floor" && collision.relativeVelocity.magnitude>=10) {
                 Explode();
             }
             
