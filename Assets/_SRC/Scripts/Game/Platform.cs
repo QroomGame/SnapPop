@@ -38,10 +38,8 @@ public class Platform : MonoBehaviour {
 
     private void OnBecameInvisible() {
         
-        if (isvisible && t.position.y < ship.position.y - 3) {
-            GameData.instance.platformManager.AddPlatforms(1);
-            Destroy(this);
-            Destroy(gameObject);            
+        if (isvisible){
+            isvisible = false;
         }
 
     }
@@ -51,6 +49,14 @@ public class Platform : MonoBehaviour {
     }
     // Update is called once per frame
     void Update () {
+
+        if(!isvisible && t.position.y < ship.position.y - 5) {            
+            GameData.instance.platformManager.AddPlatforms(1);
+            Destroy(this);
+            Destroy(gameObject);            
+            return;
+        }
+
         if (isDestroyed) {
             return;
         }
