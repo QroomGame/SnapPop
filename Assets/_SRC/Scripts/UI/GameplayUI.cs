@@ -28,6 +28,7 @@ public class GameplayUI : MonoBehaviour {
     public void GameOver(float time = 0f){
 
 		//Invoke("ActivateGameOverUI",time);
+        points.gameObject.SetActive(false);
         restartPanel.transform.Find("points").GetComponent<Text>().text= Mathf.Round(currentMts).ToString() + " m.";
         restartPanel.SetActive(true);
 

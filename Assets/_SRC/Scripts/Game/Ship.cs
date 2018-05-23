@@ -21,6 +21,7 @@ public class Ship : MonoBehaviour {
     bool rightPress = false;
     bool leftPress = false;
 
+    private bool gameOver = false;
 
     void Start() {
         t = transform;
@@ -136,6 +137,7 @@ public class Ship : MonoBehaviour {
        
         if (rg2d.velocity.y <= -12) {
             GameData.instance.ui.GameOver();
+            gameOver = true;
         }
 
     }
@@ -161,7 +163,9 @@ public class Ship : MonoBehaviour {
 
     void Explode() {
 
-        //GameObject.FindObjectOfType<GameManager>().GameOver();
+        if(!gameOver){
+            GameObject.FindObjectOfType<GameManager>().GameOver();  
+        }
         canProp = false;
         explotion.SetActive(true);
         sp.enabled = false;
