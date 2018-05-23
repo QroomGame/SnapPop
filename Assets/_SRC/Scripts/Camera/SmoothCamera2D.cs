@@ -20,7 +20,7 @@ public class SmoothCamera2D : MonoBehaviour {
     void Update() {
         if (target) {
             Vector3 tpos = target.position;
-            tpos.x = transform.position.x;
+            tpos.x = 0;
             Vector3 point = camera.WorldToViewportPoint(target.position);
             Vector3 delta = tpos - camera.ViewportToWorldPoint(new Vector3(0.5f, yIni, point.z)); //(new Vector3(0.5, 0.5, point.z));
             Vector3 destination = transform.position + delta;
